@@ -13,6 +13,7 @@ const PNF = require('google-libphonenumber').PhoneNumberFormat
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance()
 
 interface Props {
+    ref?: any
     children?: any
     initialCountry?: string
     value?: string
@@ -28,8 +29,6 @@ interface Props {
 const PhoneInput: FC<Props> = (props) => {
 
     const [ dialCode, setDialCode ] = useState<DialCode | undefined>(undefined)
-    const [ prevDialCode, setPrevDialCode ] = useState<DialCode | undefined>(undefined)
-    const [ prevValue, setPrevValue ] = useState('')
     const [ phoneNumber, setPhoneNumber ] = useState('')
     const [ countryPickerVisible, setCountryPickerVisible ] = useState(false)
 
@@ -37,48 +36,13 @@ const PhoneInput: FC<Props> = (props) => {
         const dialCode = dialCodes.find(x => props.initialCountry && x.countryCode === props.initialCountry.toUpperCase())
         if (dialCode) {
             setDialCode(dialCode)
-            setPrevDialCode(dialCode) // For safe keeping
             if (props.allowCustomDialCode) setPhoneNumber(dialCode.dialCode)
         }
     }, [])
 
     useEffect(() => {
-        if (props.value && props.value.length && props.value !== prevValue) {
-            setPrevValue(props.value)
-            const phoneNumber = removeLocalZero(zeroZeroTo31(props.value))
-            setPhoneNumber(phoneNumber)
-            if (phoneNumber.length >= 1) {
-                const newDialCode = findDialCode(phoneNumber)
-                if (newDialCode) {
-                    setDialCode(newDialCode)
-                    setPrevDialCode(newDialCode)
-                    if (!props.allowCustomDialCode)
-                        setPhoneNumber(phoneNumber.replace(newDialCode.dialCode, ''))
-                    else
-                        setPhoneNumber(phoneNumber)
-                }
-            }
-            // Handle input for response
-            if (dialCode) {
-                const input = props.allowCustomDialCode ? props.value : dialCode?.dialCode + props.value
-                if (props.onChange) {
-                    let obj = undefined
-                    try {
-                        obj = phoneUtil.parse(input, dialCode.countryCode)
-                    } catch(e) {
-                        // do nothing
-                    }
-                    const isValid = obj ? isValidNumber(input, dialCode.countryCode) : false
-                    props.onChange({
-                        dialCode: dialCode.dialCode,
-                        countryCode: dialCode.countryCode,
-                        input,
-                        isValid,
-                        number: isValid ? phoneUtil.format(obj, PNF.E164) : null
-                    })
-                }
-            }
-        }
+        if (props.value && props.value.length)
+            handleChangeText(props.value)
     }, [ props.value ])
 
     const isValidNumber = (number: string, country: string): boolean => {
@@ -93,7 +57,6 @@ const PhoneInput: FC<Props> = (props) => {
             const newDialCode = findDialCode(phoneNumber)
             if (newDialCode) {
                 setDialCode(newDialCode)
-                setPrevDialCode(newDialCode)
                 if (!props.allowCustomDialCode)
                     setPhoneNumber(phoneNumber.replace(newDialCode.dialCode, ''))
                 else
@@ -102,23 +65,18 @@ const PhoneInput: FC<Props> = (props) => {
         }
         // Handle input for response
         const input = props.allowCustomDialCode ? phoneNumber : dialCode?.dialCode + phoneNumber
-        if (props.onChangePhoneNumber) {
-            props.onChangePhoneNumber(input)
-        }
+        if (props.onChangePhoneNumber) props.onChangePhoneNumber(input)
         if (props.onChange) {
             let obj = undefined
-            try {
-                obj = phoneUtil.parse(input, dialCode.countryCode)
-            } catch(e) {
-                // do nothing
-            }
+            try { obj = phoneUtil.parse(input, dialCode.countryCode) } catch { }
             const isValid = obj ? isValidNumber(input, dialCode.countryCode) : false
+            const number = isValid ? phoneUtil.format(obj, PNF.E164) : null
             props.onChange({
                 dialCode: dialCode.dialCode,
                 countryCode: dialCode.countryCode,
                 input,
                 isValid,
-                number: isValid ? phoneUtil.format(obj, PNF.E164) : null
+                number
             })
         }
     }
@@ -131,7 +89,6 @@ const PhoneInput: FC<Props> = (props) => {
             else setPhoneNumber(newDialCode.dialCode)
         }
         setDialCode(newDialCode)
-        setPrevDialCode(newDialCode)
         setCountryPickerVisible(false)
     }
 
