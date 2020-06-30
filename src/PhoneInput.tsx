@@ -42,17 +42,7 @@ const PhoneInput: FC<Props> = (props) => {
 
     useEffect(() => {
         if (props.value && props.value.length) {
-            let number = props.value
-            let dc = findDialCode(number)
-            if (!dc) {
-                dc = initialDialCode()
-                number = dc.dialCode + number
-            }
-            setDialCode(dc)
-            let obj = undefined
-            try { obj = phoneUtil.parse(number, dc.countryCode) } catch { }
-            if (obj) setPhoneNumber(phoneUtil.format(obj, PNF.E164), dc)
-            else setPhoneNumber(number, dc)
+            handleChangeText(props.value)
         }
     }, [ props.value ])
 
