@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react'
-import { Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import CountryFlag from './CountryFlag'
 import CountryPicker from './CountryPicker'
 import dialCodes, { DialCode } from './assets/dialCodes'
@@ -24,6 +24,7 @@ interface Props {
     dialCodeStyle?: object
     dialCodeTextStyle?: object
     textStyle?: object
+    dismissKeyboard?: boolean
 }
 
 const PhoneInput: FC<Props> = (props) => {
@@ -67,24 +68,27 @@ const PhoneInput: FC<Props> = (props) => {
         if (!dc) dc = initialDialCode()
         setDialCode(dc)
         setPhoneNumber(dc.dialCode + input, dc)
-        // Handle input for response
         const number = dc.dialCode + input.split(dc.dialCode).join('')
         if (props.onChangePhoneNumber) props.onChangePhoneNumber(number)
+        emitChange(number, dc)
+    }
+
+    const emitChange = (number: string, dialCode: DialCode): void => {
         if (props.onChange) {
             let event = {
                 input: number, dialCode: null, countryCode: null, isValid: false, e164: null
             }
-            if (dc) {
-                event.dialCode = dc.dialCode
-                event.countryCode = dc.countryCode
+            if (dialCode) {
+                event.dialCode = dialCode.dialCode
+                event.countryCode = dialCode.countryCode
                 let obj = undefined
-                try { obj = phoneUtil.parse(number, dc.countryCode) } catch { }
+                try { obj = phoneUtil.parse(number, dialCode.countryCode) } catch { }
                 if (obj) {
-                    event.isValid = obj ? isValidNumber(number, dc.countryCode) : false
+                    event.isValid = obj ? isValidNumber(number, dialCode.countryCode) : false
                     event.e164 = event.isValid ? phoneUtil.format(obj, PNF.E164) : null
                 }
             }
-            console.warn(event)
+            if (event.isValid && props.dismissKeyboard) Keyboard.dismiss()
             props.onChange(event)
         }
     }
@@ -93,6 +97,7 @@ const PhoneInput: FC<Props> = (props) => {
         setDialCode(newDialCode)
         setPhoneNumber(phoneNumber, newDialCode)
         setCountryPickerVisible(false)
+        emitChange(phoneNumber, dialCode) // untested
     }
 
     return (
@@ -142,7 +147,8 @@ const PhoneInput: FC<Props> = (props) => {
 
 PhoneInput.defaultProps = {
     initialCountry: 'US',
-    allowCustomDialCode: true
+    allowCustomDialCode: true,
+    dismissKeyboard: true
 }
 
 export default PhoneInput
