@@ -68,7 +68,7 @@ const PhoneInput: FC<Props> = (props) => {
         let dc = findDialCode(input)
         if (!dc && input.startsWith('0') && input.length >= 2) {
             dc = initialDialCode()
-            input = dc.dialCode + input
+            input = dc.dialCode + input.replace(/^0+/, '')
         }
         setDialCode(dc) // update flag icon
         setPhoneNumber(input, dc)
