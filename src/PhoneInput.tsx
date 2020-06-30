@@ -36,7 +36,7 @@ const PhoneInput: FC<Props> = (props) => {
         const dialCode = initialDialCode()
         if (dialCode) {
             setDialCode(dialCode)
-            setPhoneNumber('', dialCode)
+            setPhoneNumber(dialCode.dialCode, dialCode)
         }
     }, [])
 
