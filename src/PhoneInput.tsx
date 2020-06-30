@@ -94,10 +94,11 @@ const PhoneInput: FC<Props> = (props) => {
     }
 
     const handleSelect = (newDialCode: DialCode): void => {
+        const localNumber = phoneNumber.split(dialCode?.dialCode).join('')
         setDialCode(newDialCode)
         setPhoneNumber(phoneNumber, newDialCode)
         setCountryPickerVisible(false)
-        emitChange(phoneNumber, dialCode) // untested
+        emitChange(localNumber, dialCode) // untested
     }
 
     return (
