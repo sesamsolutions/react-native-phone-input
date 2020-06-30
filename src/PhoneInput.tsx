@@ -9,11 +9,15 @@ import {
     zeroZeroTo31
 } from './utils'
 
+const PNF = require('google-libphonenumber').PhoneNumberFormat
+const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance()
+
 interface Props {
     children?: any
     initialCountry?: string
     value?: string
     allowCustomDialCode?: boolean
+    onChange?(data: any): any
     onChangePhoneNumber?(phoneNumber: string): any
     style?: object
     dialCodeStyle?: object
@@ -55,6 +59,11 @@ const PhoneInput: FC<Props> = (props) => {
         }
     }, [ props.value ])
 
+    const isValidNumber = (number: string, country: string): boolean => {
+        const obj = phoneUtil.parse(number, country)
+        return phoneUtil.isValidNumber(obj)
+    }
+
     const handleChangeText = (phoneNumber: string): void => {
         phoneNumber = removeLocalZero(zeroZeroTo31(phoneNumber))
         setPhoneNumber(phoneNumber)
@@ -70,13 +79,25 @@ const PhoneInput: FC<Props> = (props) => {
             }
         }
         const final = props.allowCustomDialCode ? phoneNumber : dialCode?.dialCode + phoneNumber
-        if (props.onChangePhoneNumber)
+        if (props.onChangePhoneNumber) {
             props.onChangePhoneNumber(final)
+        }
+        if (props.onChange) {
+            const obj = phoneUtil.parse(final, dialCode.countryCode)
+            const isValid = isValidNumber(final, dialCode.countryCode)
+            props.onChange({
+                dialCode: dialCode.dialCode,
+                number: final,
+                isValid,
+                e164: isValid ? phoneUtil.format(obj, PNF.E164) : null
+            })
+        }
     }
 
     const handleSelect = (newDialCode: DialCode): void => {
         if (props.allowCustomDialCode) {
             // Update country code while leaving number intact
+            // Update number string only if custom dial code input is allowed
             if (dialCode) setPhoneNumber(newDialCode.dialCode + phoneNumber.replace(dialCode.dialCode, ''))
             else setPhoneNumber(newDialCode.dialCode)
         }
