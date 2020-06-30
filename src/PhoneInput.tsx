@@ -67,8 +67,8 @@ const PhoneInput: FC<Props> = (props) => {
         let dc = findDialCode(input)
         if (!dc && input.length >= 1) dc = initialDialCode()
         setDialCode(dc) // update flag icon
+        setPhoneNumber(input, dc)
         const number = dc ? dc.dialCode + input.split(dc.dialCode).join('') : input
-        setPhoneNumber(number, dc)
         if (props.onChangePhoneNumber) props.onChangePhoneNumber(number)
         emitChange(number, dc)
     }
