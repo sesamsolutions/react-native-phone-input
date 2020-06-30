@@ -44,7 +44,8 @@ const PhoneInput: FC<Props> = (props) => {
         if (props.value && props.value.length) {
             let number = props.value
             let dc = findDialCode(number)
-            if (!dc) {
+            if (dc) setDialCode(dc)
+            else {
                 dc = initialDialCode()
                 number = dc.dialCode + number
             }
