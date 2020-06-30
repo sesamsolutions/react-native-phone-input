@@ -66,7 +66,10 @@ const PhoneInput: FC<Props> = (props) => {
     const handleChangeText = (input: string): void => {
         input = normalize(input)
         let dc = findDialCode(input)
-        if (!dc && input.length >= 1) dc = initialDialCode()
+        if (!dc && input.startsWith('0')) {
+            dc = initialDialCode()
+            input = dc.dialCode + input
+        }
         setDialCode(dc) // update flag icon
         setPhoneNumber(input, dc)
         const number = dc ? dc.dialCode + input.split(dc.dialCode).join('') : input
