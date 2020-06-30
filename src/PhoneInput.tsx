@@ -151,7 +151,7 @@ const PhoneInput: FC<Props> = (props) => {
 
 PhoneInput.defaultProps = {
     initialCountry: 'US',
-    allowCustomDialCode: true,
+    allowCustomDialCode: false,
     dismissKeyboard: true
 }
 
