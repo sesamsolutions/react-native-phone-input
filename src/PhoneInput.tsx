@@ -56,11 +56,10 @@ const PhoneInput: FC<Props> = (props) => {
         }
     }, [ props.value ])
 
-    const setPhoneNumber = (number: string, dialCode: DialCode): void => {
-        if (props.allowCustomDialCode)
-            setPhoneNumberState(number)
-        else
+    const setPhoneNumber = (number: string, dialCode: DialCode | undefined): void => {
+        if (!props.allowCustomDialCode && dialCode)
             setPhoneNumberState(number.replace(dialCode.dialCode, ''))
+        else setPhoneNumberState(number)
     }
 
     const initialDialCode = (): DialCode => {
