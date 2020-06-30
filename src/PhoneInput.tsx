@@ -98,7 +98,7 @@ const PhoneInput: FC<Props> = (props) => {
         setDialCode(newDialCode)
         setPhoneNumber(phoneNumber, newDialCode)
         setCountryPickerVisible(false)
-        emitChange(localNumber, dialCode) // untested
+        emitChange(localNumber, newDialCode)
     }
 
     return (
