@@ -2,6 +2,9 @@
     "name": "phone-input",
     "version": "1.0.0",
     "dependencies": {
-      "google-libphonenumber": "^3.2.10"
+        "google-libphonenumber": "^3.2.10"
+    },
+    "devDependencies": {
+        "@types/node": "^14.0.14"
     }
 }

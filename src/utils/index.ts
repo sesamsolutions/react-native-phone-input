@@ -1,5 +1,8 @@
 import dialCodes from '../assets/dialCodes'
 
+const PNF = require('google-libphonenumber').PhoneNumberFormat
+const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance()
+
 export function zeroZeroTo31(phoneNumber: string): string {
     if (phoneNumber.startsWith('00')) phoneNumber = '+' + phoneNumber.substring(2)
     return phoneNumber
@@ -25,7 +28,7 @@ export function findDialCode(phoneNumber: string): any {
     return dialCode
 }
 
-export function isValidPhoneNumber(phoneNumber: string): boolean {
-    return /^\+(?:[0-9] ?){6,14}[0-9]$/.test(phoneNumber)
+export function isValidPhoneNumber(number: string): boolean {
+    return phoneUtil.isValidNumber(number)
 }
 
