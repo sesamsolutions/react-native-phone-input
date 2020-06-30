@@ -25,8 +25,3 @@ export function findDialCode(phoneNumber: string): any {
     return dialCode
 }
 
-/*export function isValidPhoneNumber(number: string, countryCode: string): boolean {
-    const numberObj = phoneUtil.parse(number, countryCode)
-    return phoneUtil.isValidNumber(numberObj)
-}*/
-
