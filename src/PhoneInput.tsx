@@ -66,7 +66,7 @@ const PhoneInput: FC<Props> = (props) => {
     const handleChangeText = (input: string): void => {
         input = normalize(input)
         let dc = findDialCode(input)
-        if (!dc && input.startsWith('0') && input.length >= 2) {
+        if (!dc && input.startsWith('0') && input.charAt(1) != '0' && input.length >= 2) {
             dc = initialDialCode()
             input = dc.dialCode + input.replace(/^0+/, '')
         }
