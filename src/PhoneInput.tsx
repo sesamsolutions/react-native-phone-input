@@ -83,8 +83,13 @@ const PhoneInput: FC<Props> = (props) => {
             props.onChangePhoneNumber(final)
         }
         if (props.onChange) {
-            const obj = phoneUtil.parse(final, dialCode.countryCode)
-            const isValid = isValidNumber(final, dialCode.countryCode)
+            let obj = undefined
+            try {
+                obj = phoneUtil.parse(final, dialCode.countryCode)
+            } catch(e) {
+                console.log(e)
+            }
+            const isValid = obj ? isValidNumber(final, dialCode.countryCode) : false
             props.onChange({
                 dialCode: dialCode.dialCode,
                 number: final,
