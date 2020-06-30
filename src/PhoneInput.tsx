@@ -47,8 +47,8 @@ const PhoneInput: FC<Props> = (props) => {
     }, [ props.value ])
 
     const setPhoneNumber = (number: string, dialCode: DialCode | undefined): void => {
-        if (!props.allowCustomDialCode && dialCode && number.length > 1)
-            setPhoneNumberState(number.replace(new RegExp(dialCode.dialCode, 'g'), ''))
+        if (!props.allowCustomDialCode && dialCode)
+            setPhoneNumberState(number.split(dialCode.dialCode).join(''))
         else setPhoneNumberState(number)
     }
 
