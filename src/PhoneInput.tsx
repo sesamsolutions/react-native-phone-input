@@ -29,21 +29,42 @@ interface Props {
 const PhoneInput: FC<Props> = (props) => {
 
     const [ dialCode, setDialCode ] = useState<DialCode | undefined>(undefined)
-    const [ phoneNumber, setPhoneNumber ] = useState('')
+    const [ phoneNumber, setPhoneNumberState ] = useState('')
     const [ countryPickerVisible, setCountryPickerVisible ] = useState(false)
 
     useEffect(() => {
-        const dialCode = dialCodes.find(x => props.initialCountry && x.countryCode === props.initialCountry.toUpperCase())
+        const dialCode = initialDialCode()
         if (dialCode) {
             setDialCode(dialCode)
-            if (props.allowCustomDialCode) setPhoneNumber(dialCode.dialCode)
+            setPhoneNumber('', dialCode)
         }
     }, [])
 
     useEffect(() => {
-        if (props.value && props.value.length)
-            handleChangeText(props.value)
+        if (props.value && props.value.length) {
+            let number = props.value
+            let dc = findDialCode(number)
+            if (!dc) {
+                dc = initialDialCode()
+                number = dc.dialCode + number
+            }
+            let obj = undefined
+            try { obj = phoneUtil.parse(number, dc.countryCode) } catch { }
+            if (obj) setPhoneNumber(phoneUtil.format(obj, PNF.E164), dc)
+            else setPhoneNumber(number, dc)
+        }
     }, [ props.value ])
+
+    const setPhoneNumber = (number: string, dialCode: DialCode): void => {
+        if (props.allowCustomDialCode)
+            setPhoneNumberState(number)
+        else
+            setPhoneNumberState(number.replace(dialCode.dialCode, ''))
+    }
+
+    const initialDialCode = (): DialCode => {
+        return dialCodes.find(x => props.initialCountry && x.countryCode === props.initialCountry.toUpperCase())
+    }
 
     const isValidNumber = (number: string, country: string): boolean => {
         const obj = phoneUtil.parse(number, country)
@@ -53,14 +74,11 @@ const PhoneInput: FC<Props> = (props) => {
     const handleChangeText = (phoneNumber: string): void => {
         phoneNumber = removeLocalZero(zeroZeroTo31(phoneNumber))
         const newDialCode = findDialCode(phoneNumber)
-        setPhoneNumber(phoneNumber)
+        setPhoneNumber(phoneNumber, newDialCode)
         if (phoneNumber.length >= 1) {
             if (newDialCode) {
                 setDialCode(newDialCode)
-                if (!props.allowCustomDialCode)
-                    setPhoneNumber(phoneNumber.replace(newDialCode.dialCode, ''))
-                else
-                    setPhoneNumber(phoneNumber)
+                setPhoneNumber(phoneNumber, newDialCode)
             }
         }
         // Handle input for response
@@ -82,13 +100,8 @@ const PhoneInput: FC<Props> = (props) => {
     }
 
     const handleSelect = (newDialCode: DialCode): void => {
-        if (props.allowCustomDialCode) {
-            // Update country code while leaving number intact
-            // Update number string only if custom dial code input is allowed
-            if (dialCode) setPhoneNumber(newDialCode.dialCode + phoneNumber.replace(dialCode.dialCode, ''))
-            else setPhoneNumber(newDialCode.dialCode)
-        }
         setDialCode(newDialCode)
+        setPhoneNumber(phoneNumber, newDialCode)
         setCountryPickerVisible(false)
     }
 
