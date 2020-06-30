@@ -29,14 +29,14 @@ interface Props {
 const PhoneInput: FC<Props> = (props) => {
 
     const [ dialCode, setDialCode ] = useState<DialCode | undefined>(undefined)
-    const [ phoneNumber, setPhoneNumberState ] = useState('')
+    const [ phoneNumber, setPhoneNumber ] = useState('')
     const [ countryPickerVisible, setCountryPickerVisible ] = useState(false)
 
     useEffect(() => {
         const dialCode = initialDialCode()
         if (dialCode) {
             setDialCode(dialCode)
-            setPhoneNumber(dialCode.dialCode, dialCode)
+            setPhoneNumber(dialCode.dialCode)
         }
     }, [])
 
@@ -45,14 +45,6 @@ const PhoneInput: FC<Props> = (props) => {
             handleChangeText(props.value)
         }
     }, [ props.value ])
-
-    const setPhoneNumber = (number: string, dialCode: DialCode | undefined): void => {
-        /*if (dialCode) {
-            if (!props.allowCustomDialCode) setPhoneNumberState(number)
-            else setPhoneNumberState(dialCode.dialCode + number)
-        } else setPhoneNumberState(number)*/
-        setPhoneNumberState(number)
-    }
 
     const initialDialCode = (): DialCode => {
         return dialCodes.find(x => props.initialCountry && x.countryCode === props.initialCountry.toUpperCase())
@@ -71,7 +63,7 @@ const PhoneInput: FC<Props> = (props) => {
             input = dc.dialCode + input.replace(/^0+/, '')
         }
         setDialCode(dc) // update flag icon
-        setPhoneNumber(input, dc)
+        setPhoneNumber(input)
         const number = dc ? dc.dialCode + input.split(dc.dialCode).join('') : input
         if (props.onChangePhoneNumber) props.onChangePhoneNumber(number)
         emitChange(number, dc)
@@ -97,10 +89,15 @@ const PhoneInput: FC<Props> = (props) => {
         }
     }
 
+    const openCountryPicker = (): void => {
+        Keyboard.dismiss()
+        setCountryPickerVisible(true)
+    }
+
     const handleSelect = (newDialCode: DialCode): void => {
         const localNumber = phoneNumber.split(dialCode?.dialCode).join('')
         setDialCode(newDialCode)
-        setPhoneNumber(phoneNumber, newDialCode)
+        setPhoneNumber(newDialCode.dialCode + localNumber)
         setCountryPickerVisible(false)
         emitChange(localNumber, newDialCode)
     }
@@ -113,7 +110,7 @@ const PhoneInput: FC<Props> = (props) => {
                 flexDirection: 'row',
                 ...props.style
             }}>
-                <TouchableOpacity onPress={() => setCountryPickerVisible(true)} style={{ flexDirection: 'row' }}>
+                <TouchableOpacity onPress={openCountryPicker} style={{ flexDirection: 'row' }}>
                     <CountryFlag dialCode={dialCode} />
                     {!props.allowCustomDialCode && (
                         <View style={{
