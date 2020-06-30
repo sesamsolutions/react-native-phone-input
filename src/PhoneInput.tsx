@@ -5,8 +5,7 @@ import CountryPicker from './CountryPicker'
 import dialCodes, { DialCode } from './assets/dialCodes'
 import {
     findDialCode,
-    removeLocalZero,
-    zeroZeroTo31
+    normalize
 } from './utils'
 
 const PNF = require('google-libphonenumber').PhoneNumberFormat
@@ -63,7 +62,7 @@ const PhoneInput: FC<Props> = (props) => {
     }
 
     const handleChangeText = (input: string): void => {
-        input = removeLocalZero(zeroZeroTo31(input))
+        input = normalize(input)
         let dc = findDialCode(input)
         if (!dc) dc = initialDialCode()
         setDialCode(dc)

@@ -1,17 +1,14 @@
 import dialCodes from '../assets/dialCodes'
 
-export function zeroZeroTo31(phoneNumber: string): string {
-    if (phoneNumber.startsWith('00')) phoneNumber = '+' + phoneNumber.substring(2)
-    return phoneNumber
-}
-
-export function removeLocalZero(phoneNumber: string): string {
+export function normalize(phoneNumber: string): string {
     phoneNumber = phoneNumber.replace(/[()]/g, '') // removes "(" and ")"
-    phoneNumber = phoneNumber.replace(/^0+/, '')
-    const dialCode = findDialCode(phoneNumber)
-    if (dialCode) {
-        let x = phoneNumber.replace(dialCode.dialCode, '').replace(/^0+/, '')
-        phoneNumber = dialCode.dialCode + x
+    if (phoneNumber.length >= 2) {
+        let number = phoneNumber.replace(/^00/, '+')
+        const dialCode = findDialCode(number)
+        if (dialCode) {
+            let x = number.replace(dialCode.dialCode, '').replace(/^0+/, '')
+            phoneNumber = dialCode.dialCode + x
+        }
     }
     return phoneNumber
 }
