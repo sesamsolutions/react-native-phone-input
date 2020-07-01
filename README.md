@@ -1,5 +1,7 @@
 # React Native Phone Input
 
+International phone number input for React Native, using [ruimarinho/google-libphonenumber](https://github.com/ruimarinho/google-libphonenumber) to validate input. Automatically converts phone numbers to valid e164 format.
+
 ## Installation
 
 ```
@@ -58,7 +60,7 @@ Set the initial country and dial code. Defaults to `US`.
 
 #### `onChange`
 
-Returns an object containing information about the Phone Number every time the input or `value` changes.
+Returns an object containing information about the Phone number every time the input or `value` changes.
 
 * `countryCode`: currently selected country code. `null` if not selected.
 * `dialCode`: current dial code. `null` if not selected.
