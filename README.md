@@ -2,11 +2,15 @@
 
 ## Installation
 
-```yarn add @sesamsolutions/phone-input```
+```
+yarn add @sesamsolutions/phone-input
+```
 
 or
 
-```npm install @sesamsolutions/phone-input```
+```
+npm install @sesamsolutions/phone-input
+```
 
 ## Usage
 
