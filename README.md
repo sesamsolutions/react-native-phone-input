@@ -70,7 +70,7 @@ Returns an object containing information about the Phone number every time the i
 
 #### `onChangePhoneNumber`
 
-Returns the current raw input `string`. It is recommended to use `onChange` instead to benefit from additional validations such as e164 ouput.
+Returns current raw input `string`. Use `onChange` instead to benefit from additional validations.
 
 #### `value`
 
