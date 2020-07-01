@@ -1,6 +1,6 @@
 # React Native Phone Input
 
-International phone number input for React Native with country picker. Uses [ruimarinho/google-libphonenumber](https://github.com/ruimarinho/google-libphonenumber) to validate input and automatically translates to valid e164 format.
+International phone number input for React Native with country picker supporting 235 countries. Uses [ruimarinho/google-libphonenumber](https://github.com/ruimarinho/google-libphonenumber) to validate input and automatically translates to valid e164 format.
 
 ## Installation
 
