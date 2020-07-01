@@ -74,8 +74,7 @@ Returns current raw input `string`. Use `onChange` instead to benefit from addit
 
 #### `value`
 
-Changes the current input.
-Be careful not to update this when the `onChange` event fires. This will cause an endless loop.
+Changes the current input. Be careful not to update this with `onChange`. This will cause an endless loop.
 
 #### `allowCustomDialCode`
 
