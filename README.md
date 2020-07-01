@@ -58,6 +58,8 @@ export default App
 
 Set the initial country and dial code. Defaults to `US`.
 
+---
+
 #### `onChange`
 
 Returns an object containing information about the Phone number every time the input or `value` changes.
@@ -68,25 +70,37 @@ Returns an object containing information about the Phone number every time the i
 * `input`: raw phone number input. Same as `onChangePhoneNumber`.
 * `isValid`: `boolean` indicating if phone number is valid.
 
+---
+
 #### `onChangePhoneNumber`
 
 Returns current raw input `string`. Use `onChange` instead to benefit from additional validations.
+
+---
 
 #### `value`
 
 Changes the current input. Be careful not to update this with `onChange`. This will cause an endless loop.
 
+---
+
 #### `allowCustomDialCode`
 
 `boolean` indicating whether custom dial code input should be allowed or not. When set to false you can only select dial codes from the country picker. Defaults to `true`.
+
+---
 
 #### `dismissKeyboard`
 
 `boolean` indicating if the keyboard should be dismissed automatically after the input is considered valid e164 format. Defaults to `true`.
 
+---
+
 #### `style`
 
 Customize the phone number input.
+
+---
 
 #### `textStyle`
 
