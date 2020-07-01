@@ -68,7 +68,7 @@ Returns an object containing information about the Phone number every time the i
 * `dialCode`: current dial code. `null` if not selected.
 * `e164`: e164 valid phone number. `null` if invalid.
 * `input`: raw phone number input. Same as `onChangePhoneNumber`.
-* `isValid`: `boolean` indicating if phone number is valid.
+* `isValid`: `boolean` indicating if input is a valid phone number.
 
 ---
 
