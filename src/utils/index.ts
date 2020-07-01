@@ -1,7 +1,7 @@
 import dialCodes from '../assets/dialCodes'
 
 export function normalize(phoneNumber: string): string {
-    phoneNumber = phoneNumber.replace(/[()]/g, '') // removes "(" and ")"
+    phoneNumber = phoneNumber.replace(/[()]/g, '').trim() // removes "(" and ")" and spaces
     if (phoneNumber.length >= 2) {
         let number = phoneNumber.replace(/^00/, '+')
         const dialCode = findDialCode(number)

@@ -60,7 +60,7 @@ const PhoneInput: FC<Props> = (props) => {
         let dc = findDialCode(input)
         if (!dc && !input.startsWith('+') && !input.startsWith('00')) {
             dc = initialDialCode()
-            if (input.length >= 1)
+            if (input.length >= 2)
                 input = dc.dialCode + input.replace(/^0+/, '')
         }
         if (dc && !props.allowCustomDialCode)
