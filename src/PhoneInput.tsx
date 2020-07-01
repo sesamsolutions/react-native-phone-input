@@ -38,6 +38,7 @@ const PhoneInput: FC<Props> = (props) => {
             setDialCode(dialCode)
             if (props.allowCustomDialCode) setPhoneNumber(dialCode.dialCode)
         }
+        console.log(dialCodes.length)
     }, [])
 
     useEffect(() => {

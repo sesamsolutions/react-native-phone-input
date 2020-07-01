@@ -1,11 +1,11 @@
 {
-    "name": "react-native-phoneinput",
-    "description": "React Native PhoneInput",
+    "name": "@sesamsolutions/phone-input",
+    "description": "React Native Phone Input",
     "version": "1.0.0",
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/sesamsolutions/react-native-phoneinput.git"
+        "url": "git+https://github.com/sesamsolutions/react-native-phone-input.git"
     },
     "author": "Sesam Solutions",
     "dependencies": {
