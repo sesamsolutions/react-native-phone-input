@@ -58,12 +58,14 @@ const PhoneInput: FC<Props> = (props) => {
     const handleChangeText = (input: string): void => {
         input = normalize(input)
         let dc = findDialCode(input)
-        if (!dc && input.startsWith('0') && input.charAt(1) != '0' && input.length >= 2) {
+        if (!dc && !input.startsWith('+') && !input.startsWith('00')) {
             dc = initialDialCode()
-            input = dc.dialCode + input.replace(/^0+/, '')
+            if (input.length >= 1)
+                input = dc.dialCode + input.replace(/^0+/, '')
         }
-        if (dc && !props.allowCustomDialCode) input = input.split(dc.dialCode).join('')
-        if (!dc || !props.allowCustomDialCode) dc = dialCode // no changes
+        if (dc && !props.allowCustomDialCode)
+            input = input.split(dc.dialCode).join('')
+        //if (!dc || !props.allowCustomDialCode) dc = dialCode // no changes
         setDialCode(dc) // update flag icon
         setPhoneNumber(input)
         const number = dc ? dc.dialCode + input.split(dc.dialCode).join('') : input
