@@ -24,6 +24,7 @@ interface Props {
     dialCodeTextStyle?: object
     textStyle?: object
     dismissKeyboard?: boolean
+    autoFocus?: boolean
 }
 
 const PhoneInput: FC<Props> = (props) => {
@@ -134,6 +135,7 @@ const PhoneInput: FC<Props> = (props) => {
                     dataDetectorTypes={[ 'phoneNumber' ]}
                     keyboardType={props.allowCustomDialCode ? 'phone-pad' : 'number-pad'}
                     onChangeText={handleChangeText}
+                    autoFocus={props.autoFocus}
                     value={phoneNumber}
                     style={{
                         borderWidth: 0,
