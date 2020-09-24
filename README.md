@@ -41,8 +41,7 @@ const App = () => {
         <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
             <PhoneInput
                 initialCountry="US"
-                onChange={handleChange}
-                dismissKeyboard={true} />
+                onChange={handleChange} />
         </View>
     )
     
