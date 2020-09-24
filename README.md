@@ -42,7 +42,6 @@ const App = () => {
             <PhoneInput
                 initialCountry="US"
                 onChange={handleChange}
-                allowCustomDialCode={false}
                 dismissKeyboard={true} />
         </View>
     )
@@ -92,7 +91,7 @@ Changes the current input. Be careful not to update this with `onChange`. This w
 
 #### `dismissKeyboard`
 
-`boolean` indicating if the keyboard should be dismissed automatically after the input is considered valid e164 format. Defaults to `true`.
+Hide the keyboard automatically when the input is considered valid e164 format. Defaults to `true`.
 
 ---
 
