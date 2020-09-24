@@ -84,9 +84,9 @@ Changes the current input. Be careful not to update this with `onChange`. This w
 
 ---
 
-#### `allowCustomDialCode`
+#### ~~`allowCustomDialCode`~~
 
-`boolean` indicating whether custom dial code input should be allowed or not. When set to false you can only select dial codes from the country picker. Defaults to `true`.
+~~`boolean` indicating whether custom dial code input should be allowed or not. When set to false you can only select dial codes from the country picker. Defaults to `true`.~~
 
 ---
 
