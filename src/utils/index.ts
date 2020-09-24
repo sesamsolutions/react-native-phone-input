@@ -14,10 +14,11 @@ export function normalize(phoneNumber: string): string {
 }
 
 export function findDialCode(phoneNumber: string): any {
-    let dialCode = dialCodes.find(x => x.dialCode === phoneNumber.substr(0, 5))
-    if (!dialCode) dialCode = dialCodes.find(x => x.dialCode === phoneNumber.substr(0, 4))
-    if (!dialCode) dialCode = dialCodes.find(x => x.dialCode === phoneNumber.substr(0, 3))
-    if (!dialCode) dialCode = dialCodes.find(x => x.dialCode === phoneNumber.substr(0, 2))
+    let dialCode = null
+    for (let i = 5; i >= 2; i--) {
+        dialCode = dialCodes.find(dc => dc.dialCode === phoneNumber.substr(0, i))
+        if (dialCode) break
+    }
     return dialCode
 }
 

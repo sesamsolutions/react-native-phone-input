@@ -1,51 +1,81 @@
-import React, { FC, useEffect } from 'react'
-import {
-    Dimensions,
-    FlatList,
-    Modal,
-    Text,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View
-} from 'react-native'
+import React, { FC, useState, useEffect, useRef } from 'react'
+import { Animated, Dimensions, FlatList, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, useColorScheme, View } from 'react-native'
 import CountryFlag from './CountryFlag'
 import dialCodes, { DialCode } from './assets/dialCodes'
 
-const screenHeight = Dimensions.get('window').height
-const screenWidth = Dimensions.get('window').width
+const { width, height } = Dimensions.get('window')
 
 interface Props {
     children?: any
-    dialCode: DialCode | undefined
     visible: boolean
     onSelect(dialCode: DialCode): any
     onRequestClose(): any
 }
 
-const CountryPicker: FC<Props> = (props) => {
+const CountryPicker: FC<Props> = ({
+    visible = false,
+    onSelect = (dialCode: DialCode) => {},
+    onRequestClose = () => {}
+}) => {
+
+    const pickerHeight = useRef(height - 285).current
+    const showAnimation = useRef(new Animated.Value(0)).current
+    const [ _visible, _setVisible ] = useState(visible)
+    const colorScheme = useColorScheme()
 
     useEffect(() => {
+        if (visible) _setVisible(true)
+        else {
+            Animated.spring(showAnimation, {
+                toValue: visible ? 1 : 0,
+                stiffness: 1000,
+                damping: 500,
+                mass: 1.5,
+                useNativeDriver: true
+            }).start(() => _setVisible(false))
+        }
+    }, [ visible ])
 
-    }, [])
+    useEffect(() => {
+        if (_visible) {
+            Animated.spring(showAnimation, {
+                toValue: visible ? 1 : 0,
+                stiffness: 500,
+                damping: 100,
+                mass: 1.5,
+                useNativeDriver: true
+            }).start()
+        }
+    }, [ _visible ])
+
+    const translateY = showAnimation.interpolate({
+        inputRange: [ 0, 1 ],
+        outputRange: [ pickerHeight, 0 ]
+    })
 
     return (
-        <Modal visible={props.visible} transparent>
-            <TouchableWithoutFeedback onPress={props.onRequestClose}>
-                <View style={{
-                    backgroundColor: 'rgba(0, 0, 0, .3)',
-                    flex: 1
-                }}>
+        <Modal visible={_visible} transparent>
+            <TouchableWithoutFeedback onPress={onRequestClose}>
+                <View style={{ flex: 1 }}>
+                    <Animated.View style={{
+                        backgroundColor: 'rgba(0, 0, 0, .3)',
+                        height,
+                        opacity: showAnimation,
+                        position: 'absolute',
+                        width
+                    }} />
                     <TouchableWithoutFeedback onPress={() => {}}>
-                        <View style={{
-                            backgroundColor: '#ffffff',
+                        <Animated.View style={{
+                            backgroundColor: colorScheme === 'light' ? '#ffffff' : '#1c1c1e',
                             borderTopLeftRadius: 14,
                             borderTopRightRadius: 14,
                             bottom: 0,
-                            height: screenHeight - 284,
+                            height: pickerHeight,
                             overflow: 'hidden',
                             paddingTop: 10,
                             position: 'absolute',
-                            width: screenWidth
+                            transform: [{ translateY }],
+                            width: width
                         }}>
                             <FlatList
                                 data={dialCodes}
@@ -54,10 +84,10 @@ const CountryPicker: FC<Props> = (props) => {
                                 keyExtractor={(item) => item.countryCode}
                                 keyboardShouldPersistTaps="always"
                                 renderItem={({ item }) => (
-                                    <TouchableOpacity onPress={() => props.onSelect(item)}>
+                                    <TouchableOpacity onPress={() => onSelect(item)}>
                                         <View style={{
                                             alignItems: 'center',
-                                            borderColor: '#eff2f5',
+                                            borderColor: colorScheme === 'light' ? '#eff2f5' : '#29292b',
                                             borderBottomWidth: 1,
                                             height: 48,
                                             flexDirection: 'row',
@@ -66,7 +96,9 @@ const CountryPicker: FC<Props> = (props) => {
                                         }}>
                                             <CountryFlag dialCode={item} />
                                             <View style={{ marginLeft: 4 }}>
-                                                <Text>{item.name}</Text>
+                                                <Text style={{
+                                                    color: colorScheme === 'light' ? '#111111' : '#ffffff'
+                                                }}>{item.name}</Text>
                                             </View>
                                             <View style={{
                                                 marginLeft: 'auto',
@@ -81,7 +113,7 @@ const CountryPicker: FC<Props> = (props) => {
                                     </TouchableOpacity>
                                 )}
                             />
-                        </View>
+                        </Animated.View>
                     </TouchableWithoutFeedback>
                 </View>
             </TouchableWithoutFeedback>

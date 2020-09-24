@@ -3,10 +3,7 @@ import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import CountryFlag from './CountryFlag'
 import CountryPicker from './CountryPicker'
 import dialCodes, { DialCode } from './assets/dialCodes'
-import {
-    findDialCode,
-    normalize
-} from './utils'
+import { findDialCode, normalize } from './utils'
 
 const PNF = require('google-libphonenumber').PhoneNumberFormat
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance()
@@ -16,18 +13,27 @@ interface Props {
     children?: any
     initialCountry?: string
     value?: string
-    allowCustomDialCode?: boolean
     onChange?(data: any): any
     onChangePhoneNumber?(phoneNumber: string): any
     style?: object
-    dialCodeStyle?: object
-    dialCodeTextStyle?: object
     textStyle?: object
     dismissKeyboard?: boolean
     autoFocus?: boolean
+    allowCustomDialCode?: boolean // deprecated
+    dialCodeStyle?: object // deprecated
+    dialCodeTextStyle?: object // deprecated
 }
 
-const PhoneInput: FC<Props> = (props) => {
+const PhoneInput: FC<Props> = ({
+    initialCountry = 'US',
+    value,
+    onChange = (data: any) => {},
+    onChangePhoneNumber = (phoneNumber: string) => {},
+    style = {},
+    textStyle = {},
+    dismissKeyboard = true,
+    autoFocus = false
+}) => {
 
     const [ dialCode, setDialCode ] = useState<DialCode | undefined>(undefined)
     const [ phoneNumber, setPhoneNumber ] = useState('')
@@ -37,18 +43,18 @@ const PhoneInput: FC<Props> = (props) => {
         const dialCode = initialDialCode()
         if (dialCode) {
             setDialCode(dialCode)
-            if (props.allowCustomDialCode) setPhoneNumber(dialCode.dialCode)
+            setPhoneNumber(dialCode.dialCode)
         }
     }, [])
 
     useEffect(() => {
-        if (props.value && props.value.length) {
-            handleChangeText(props.value)
+        if (value && value.length) {
+            handleChangeText(value)
         }
-    }, [ props.value ])
+    }, [ value ])
 
     const initialDialCode = (): DialCode => {
-        return dialCodes.find(x => props.initialCountry && x.countryCode === props.initialCountry.toUpperCase())
+        return dialCodes.find(x => initialCountry && x.countryCode === initialCountry.toUpperCase())
     }
 
     const isValidNumber = (number: string, country: string): boolean => {
@@ -61,20 +67,17 @@ const PhoneInput: FC<Props> = (props) => {
         let dc = findDialCode(input)
         if (!dc && !input.startsWith('+') && !input.startsWith('00')) {
             dc = initialDialCode()
-            if (input.length >= 2)
-                input = dc.dialCode + input.replace(/^0+/, '')
+            if (input.length >= 2) input = dc.dialCode + input.replace(/^0+/, '')
         }
-        if (dc && !props.allowCustomDialCode)
-            input = input.split(dc.dialCode).join('')
         setDialCode(dc) // update flag icon
         setPhoneNumber(input)
         const number = dc ? dc.dialCode + input.split(dc.dialCode).join('') : input
-        if (props.onChangePhoneNumber) props.onChangePhoneNumber(number)
+        if (onChangePhoneNumber) onChangePhoneNumber(number)
         emitChange(number, dc)
     }
 
     const emitChange = (number: string, dialCode: DialCode): void => {
-        if (props.onChange) {
+        if (onChange) {
             let event = {
                 input: number, dialCode: null, countryCode: null, isValid: false, e164: null
             }
@@ -88,8 +91,8 @@ const PhoneInput: FC<Props> = (props) => {
                     event.e164 = event.isValid ? phoneUtil.format(obj, PNF.E164) : null
                 }
             }
-            if (event.isValid && props.dismissKeyboard) Keyboard.dismiss()
-            props.onChange(event)
+            if (event.isValid && dismissKeyboard) Keyboard.dismiss()
+            onChange(event)
         }
     }
 
@@ -112,37 +115,23 @@ const PhoneInput: FC<Props> = (props) => {
                 borderColor: '#eeeeee',
                 borderBottomWidth: 1,
                 flexDirection: 'row',
-                ...props.style
+                ...style
             }}>
                 <TouchableOpacity onPress={openCountryPicker} style={{ flexDirection: 'row' }}>
                     <CountryFlag dialCode={dialCode} />
-                    {!props.allowCustomDialCode && (
-                        <View style={{
-                            borderColor: '#eeeeee',
-                            borderRightWidth: 1,
-                            justifyContent: 'center',
-                            paddingRight: 14,
-                            ...props.dialCodeStyle
-                        }}>
-                            <Text style={{
-                                ...props.textStyle,
-                                ...props.dialCodeTextStyle
-                            }}>{dialCode?.dialCode}</Text>
-                        </View>
-                    )}
                 </TouchableOpacity>
                 <TextInput
                     dataDetectorTypes={[ 'phoneNumber' ]}
-                    keyboardType={props.allowCustomDialCode ? 'phone-pad' : 'number-pad'}
+                    keyboardType={'phone-pad'}
                     onChangeText={handleChangeText}
-                    autoFocus={props.autoFocus}
+                    autoFocus={autoFocus}
                     value={phoneNumber}
                     style={{
                         borderWidth: 0,
                         flexGrow: 1,
                         height: 40,
-                        paddingLeft: props.allowCustomDialCode ? 0 : 14,
-                        ...props.textStyle
+                        paddingLeft: 0,
+                        ...textStyle
                     }} />
             </View>
             <CountryPicker
@@ -153,12 +142,6 @@ const PhoneInput: FC<Props> = (props) => {
         </>
     )
 
-}
-
-PhoneInput.defaultProps = {
-    initialCountry: 'US',
-    allowCustomDialCode: false,
-    dismissKeyboard: true
 }
 
 export default PhoneInput
