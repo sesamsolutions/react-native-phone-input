@@ -1264,14 +1264,14 @@ const dialCodes: DialCode[] = [
         longitude: -77.5,
         name: 'Ecuador',
     },
-    /*{
+    {
         countryCode: 'GF',
         dialCode: '+594',
         icon: require('./flags/GF.png'),
         latitude: 4,
         longitude: -53,
         name: 'French Guiana',
-    },*/
+    },
     {
         countryCode: 'PY',
         dialCode: '+595',
