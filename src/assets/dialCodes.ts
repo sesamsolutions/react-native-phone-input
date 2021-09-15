@@ -1232,14 +1232,14 @@ const dialCodes: DialCode[] = [
         longitude: -72.4167,
         name: 'Haiti',
     },
-    /*{
+    {
         countryCode: 'GP',
         dialCode: '+590',
         icon: require('./flags/GP.png'),
         latitude: 16.25,
         longitude: -61.5833,
         name: 'Guadeloupe',
-    },*/
+    },
     {
         countryCode: 'BO',
         dialCode: '+591',
