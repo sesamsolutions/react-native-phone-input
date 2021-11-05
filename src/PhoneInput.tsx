@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react'
-import { Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Keyboard, TextInput, TouchableOpacity, View } from 'react-native'
 import CountryFlag from './CountryFlag'
 import CountryPicker from './CountryPicker'
 import dialCodes, { DialCode } from './assets/dialCodes'
@@ -8,7 +8,7 @@ import { findDialCode, normalize } from './utils'
 const PNF = require('google-libphonenumber').PhoneNumberFormat
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance()
 
-interface Props {
+export interface PhoneInputProps {
     ref?: any
     children?: any
     initialCountry?: string
@@ -24,7 +24,7 @@ interface Props {
     dialCodeTextStyle?: object // deprecated
 }
 
-const PhoneInput: FC<Props> = ({
+const PhoneInput: FC<PhoneInputProps> = ({
     initialCountry = 'US',
     value,
     onChange = (data: any) => {},
