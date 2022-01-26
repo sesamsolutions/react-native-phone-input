@@ -1089,6 +1089,14 @@ const dialCodes: DialCode[] = [
         name: 'Montenegro',
     },
     {
+        countryCode: 'XK',
+        dialCode: '+383',
+        icon: require('./flags/XK.png'),
+        latitude: 42.67,
+        longitude: 21.17,
+        name: 'Kosovo, Republic of',
+    },
+    {
         countryCode: 'HR',
         dialCode: '+385',
         icon: require('./flags/HR.png'),
