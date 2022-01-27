@@ -1,7 +1,7 @@
 {
     "name": "@sesamsolutions/phone-input",
     "description": "React Native Phone Input",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "license": "MIT",
     "repository": {
         "type": "git",
@@ -9,7 +9,7 @@
     },
     "author": "Sesam Solutions",
     "dependencies": {
-        "google-libphonenumber": "^3.2.25"
+        "google-libphonenumber": "^3.2.26"
     },
     "devDependencies": {
         "@types/node": "^14.11.2"
