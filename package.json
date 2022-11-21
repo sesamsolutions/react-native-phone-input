@@ -9,9 +9,9 @@
     },
     "author": "Sesam Solutions",
     "dependencies": {
-        "google-libphonenumber": "^3.2.26"
+        "google-libphonenumber": "^3.2.31"
     },
     "devDependencies": {
-        "@types/node": "^14.11.2"
+        "@types/node": "^18.11.9"
     }
 }
