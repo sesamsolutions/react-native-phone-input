@@ -112,6 +112,6 @@ const PhoneInput = ({ initialCountry = 'US', value, style = {}, textStyle = {}, 
             react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: openCountryPicker, style: { flexDirection: 'row' } },
                 react_1.default.createElement(CountryFlag_1.default, { dialCode: dialCode })),
             react_1.default.createElement(react_native_1.TextInput, { dataDetectorTypes: ['phoneNumber'], keyboardType: 'phone-pad', onChangeText: handleChangeText, autoFocus: autoFocus, value: phoneNumber, style: Object.assign({ borderWidth: 0, flexGrow: 1, height: 40, paddingLeft: 0 }, textStyle) })),
-        react_1.default.createElement(CountryPicker_1.default, { visible: countryPickerVisible, dialCode: dialCode, onSelect: handleSelect, onRequestClose: () => setCountryPickerVisible(false) })));
+        react_1.default.createElement(CountryPicker_1.default, { visible: countryPickerVisible, onSelect: handleSelect, onRequestClose: () => setCountryPickerVisible(false) })));
 };
 exports.default = PhoneInput;
