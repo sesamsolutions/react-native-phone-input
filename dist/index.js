@@ -3,5 +3,5 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const PhoneInput_1 = __importDefault(require("./src/PhoneInput"));
+const PhoneInput_1 = __importDefault(require("./PhoneInput"));
 exports.default = PhoneInput_1.default;

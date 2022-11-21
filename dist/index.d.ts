@@ -1,3 +1,3 @@
-import PhoneInput, { PhoneInputProps } from './src/PhoneInput';
+import PhoneInput, { PhoneInputProps } from './PhoneInput';
 export { PhoneInputProps };
 export default PhoneInput;

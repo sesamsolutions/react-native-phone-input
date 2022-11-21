@@ -62,7 +62,7 @@ const PhoneInput: FC<PhoneInputProps> = ({
     }, [ value ])
 
     const initialDialCode = (): DialCode | undefined => {
-        return dialCodes.find(x => initialCountry && x.countryCode === initialCountry.toUpperCase())
+        return dialCodes.find(dc => initialCountry && dc.countryCode === initialCountry.toUpperCase())
     }
 
     const isValidNumber = (number: string, country: string): boolean => {
@@ -75,7 +75,7 @@ const PhoneInput: FC<PhoneInputProps> = ({
         let dc = findDialCode(input)
         if (!dc && !input.startsWith('+') && !input.startsWith('00')) {
             dc = initialDialCode()
-            if (input.length >= 2) input = dc.dialCode + input.replace(/^0+/, '')
+            if (dc && input.length >= 2) input = dc.dialCode + input.replace(/^0+/, '')
         }
         setDialCode(dc) // update flag icon
         setPhoneNumber(input)
@@ -84,7 +84,7 @@ const PhoneInput: FC<PhoneInputProps> = ({
         emitChange(number, dc)
     }
 
-    const emitChange = (number: string, dialCode: DialCode): void => {
+    const emitChange = (number: string, dialCode?: DialCode): void => {
         if (onChange) {
             const event: PhoneInputChangeEvent = {
                 input: number, dialCode: null, countryCode: null, isValid: false, e164: null
