@@ -13,8 +13,6 @@ export interface PhoneInputProps {
     children?: any
     initialCountry?: string
     value?: string
-    onChange?(data: any): any
-    onChangePhoneNumber?(phoneNumber: string): any
     style?: object
     textStyle?: object
     dismissKeyboard?: boolean
@@ -22,17 +20,27 @@ export interface PhoneInputProps {
     allowCustomDialCode?: boolean // deprecated
     dialCodeStyle?: object // deprecated
     dialCodeTextStyle?: object // deprecated
+    onChange?(data: PhoneInputChangeEvent): void
+    onChangePhoneNumber?(phoneNumber: string): void
+}
+
+export interface PhoneInputChangeEvent {
+    input: string
+    dialCode: string | null
+    countryCode: string | null
+    isValid: boolean
+    e164: string | null
 }
 
 const PhoneInput: FC<PhoneInputProps> = ({
     initialCountry = 'US',
     value,
-    onChange = (data: any) => {},
-    onChangePhoneNumber = (phoneNumber: string) => {},
     style = {},
     textStyle = {},
     dismissKeyboard = true,
-    autoFocus = false
+    autoFocus = false,
+    onChange = (data: PhoneInputChangeEvent) => {},
+    onChangePhoneNumber = (phoneNumber: string) => {}
 }) => {
 
     const [ dialCode, setDialCode ] = useState<DialCode | undefined>(undefined)
@@ -53,7 +61,7 @@ const PhoneInput: FC<PhoneInputProps> = ({
         }
     }, [ value ])
 
-    const initialDialCode = (): DialCode => {
+    const initialDialCode = (): DialCode | undefined => {
         return dialCodes.find(x => initialCountry && x.countryCode === initialCountry.toUpperCase())
     }
 
@@ -78,7 +86,7 @@ const PhoneInput: FC<PhoneInputProps> = ({
 
     const emitChange = (number: string, dialCode: DialCode): void => {
         if (onChange) {
-            let event = {
+            const event: PhoneInputChangeEvent = {
                 input: number, dialCode: null, countryCode: null, isValid: false, e164: null
             }
             if (dialCode) {
@@ -136,7 +144,6 @@ const PhoneInput: FC<PhoneInputProps> = ({
             </View>
             <CountryPicker
                 visible={countryPickerVisible}
-                dialCode={dialCode}
                 onSelect={handleSelect}
                 onRequestClose={() => setCountryPickerVisible(false)} />
         </>

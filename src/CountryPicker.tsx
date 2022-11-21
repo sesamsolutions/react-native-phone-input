@@ -8,8 +8,8 @@ const { width, height } = Dimensions.get('window')
 interface Props {
     children?: any
     visible: boolean
-    onSelect(dialCode: DialCode): any
-    onRequestClose(): any
+    onSelect(dialCode: DialCode): void
+    onRequestClose(): void
 }
 
 const CountryPicker: FC<Props> = ({
