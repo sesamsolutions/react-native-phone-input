@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Keyboard, TextInput, TouchableOpacity, View } from 'react-native'
 import CountryFlag from './CountryFlag'
 import CountryPicker from './CountryPicker'
@@ -13,13 +13,10 @@ export interface PhoneInputProps {
     children?: any
     initialCountry?: string
     value?: string
-    style?: object
-    textStyle?: object
+    style?: any
+    textStyle?: any
     dismissKeyboard?: boolean
     autoFocus?: boolean
-    allowCustomDialCode?: boolean // deprecated
-    dialCodeStyle?: object // deprecated
-    dialCodeTextStyle?: object // deprecated
     onChange?(data: PhoneInputChangeEvent): void
     onChangePhoneNumber?(phoneNumber: string): void
 }
@@ -32,16 +29,16 @@ export interface PhoneInputChangeEvent {
     e164: string | null
 }
 
-const PhoneInput: FC<PhoneInputProps> = ({
+const PhoneInput = ({
     initialCountry = 'US',
     value,
     style = {},
     textStyle = {},
     dismissKeyboard = true,
     autoFocus = false,
-    onChange = (data: PhoneInputChangeEvent) => {},
-    onChangePhoneNumber = (phoneNumber: string) => {}
-}) => {
+    onChange = () => {},
+    onChangePhoneNumber = () => {}
+}: PhoneInputProps) => {
 
     const [ dialCode, setDialCode ] = useState<DialCode | undefined>(undefined)
     const [ phoneNumber, setPhoneNumber ] = useState('')
@@ -119,12 +116,11 @@ const PhoneInput: FC<PhoneInputProps> = ({
 
     return (
         <>
-            <View style={{
+            <View style={[{
                 borderColor: '#eeeeee',
                 borderBottomWidth: 1,
-                flexDirection: 'row',
-                ...style
-            }}>
+                flexDirection: 'row'
+            },style]}>
                 <TouchableOpacity onPress={openCountryPicker} style={{ flexDirection: 'row' }}>
                     <CountryFlag dialCode={dialCode} />
                 </TouchableOpacity>
@@ -134,13 +130,12 @@ const PhoneInput: FC<PhoneInputProps> = ({
                     onChangeText={handleChangeText}
                     autoFocus={autoFocus}
                     value={phoneNumber}
-                    style={{
+                    style={[{
                         borderWidth: 0,
                         flexGrow: 1,
                         height: 40,
-                        paddingLeft: 0,
-                        ...textStyle
-                    }} />
+                        paddingLeft: 0
+                    },textStyle]} />
             </View>
             <CountryPicker
                 visible={countryPickerVisible}

@@ -34,7 +34,7 @@ const dialCodes_1 = __importDefault(require("./assets/dialCodes"));
 const utils_1 = require("./utils");
 const PNF = require('google-libphonenumber').PhoneNumberFormat;
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
-const PhoneInput = ({ initialCountry = 'US', value, style = {}, textStyle = {}, dismissKeyboard = true, autoFocus = false, onChange = (data) => { }, onChangePhoneNumber = (phoneNumber) => { } }) => {
+const PhoneInput = ({ initialCountry = 'US', value, style = {}, textStyle = {}, dismissKeyboard = true, autoFocus = false, onChange = () => { }, onChangePhoneNumber = () => { } }) => {
     const [dialCode, setDialCode] = (0, react_1.useState)(undefined);
     const [phoneNumber, setPhoneNumber] = (0, react_1.useState)('');
     const [countryPickerVisible, setCountryPickerVisible] = (0, react_1.useState)(false);
@@ -108,10 +108,19 @@ const PhoneInput = ({ initialCountry = 'US', value, style = {}, textStyle = {}, 
         setCountryPickerVisible(false);
     };
     return (react_1.default.createElement(react_1.default.Fragment, null,
-        react_1.default.createElement(react_native_1.View, { style: Object.assign({ borderColor: '#eeeeee', borderBottomWidth: 1, flexDirection: 'row' }, style) },
+        react_1.default.createElement(react_native_1.View, { style: [{
+                    borderColor: '#eeeeee',
+                    borderBottomWidth: 1,
+                    flexDirection: 'row'
+                }, style] },
             react_1.default.createElement(react_native_1.TouchableOpacity, { onPress: openCountryPicker, style: { flexDirection: 'row' } },
                 react_1.default.createElement(CountryFlag_1.default, { dialCode: dialCode })),
-            react_1.default.createElement(react_native_1.TextInput, { dataDetectorTypes: ['phoneNumber'], keyboardType: 'phone-pad', onChangeText: handleChangeText, autoFocus: autoFocus, value: phoneNumber, style: Object.assign({ borderWidth: 0, flexGrow: 1, height: 40, paddingLeft: 0 }, textStyle) })),
+            react_1.default.createElement(react_native_1.TextInput, { dataDetectorTypes: ['phoneNumber'], keyboardType: 'phone-pad', onChangeText: handleChangeText, autoFocus: autoFocus, value: phoneNumber, style: [{
+                        borderWidth: 0,
+                        flexGrow: 1,
+                        height: 40,
+                        paddingLeft: 0
+                    }, textStyle] })),
         react_1.default.createElement(CountryPicker_1.default, { visible: countryPickerVisible, onSelect: handleSelect, onRequestClose: () => setCountryPickerVisible(false) })));
 };
 exports.default = PhoneInput;

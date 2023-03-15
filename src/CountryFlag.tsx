@@ -1,5 +1,5 @@
-import React, { FC } from 'react'
-import { Image, View } from 'react-native'
+import React from 'react'
+import { Image } from 'react-native'
 import { DialCode } from './assets/dialCodes'
 
 interface CountryFlagProps {
@@ -7,24 +7,21 @@ interface CountryFlagProps {
     dialCode?: DialCode
 }
 
-const CountryFlag: FC<CountryFlagProps> = (props) => (
-    <View style={{
-        alignItems: 'center',
-        height: 40,
-        justifyContent: 'center',
-        marginRight: 12,
-        width: 28
-    }}>
-        {props.dialCode && props.dialCode.icon && (
+const CountryFlag = ({ dialCode }: CountryFlagProps) => {
+    if (dialCode && dialCode.icon) {
+        return (
             <Image
                 style={{
                     aspectRatio: 1,
                     height: undefined,
+                    marginRight: 12,
+                    marginVertical: 6,
                     width: 28
                 }}
-                source={props.dialCode.icon} />
-        )}
-    </View>
-)
+                source={dialCode.icon} />
+        )
+    }
+    return null
+}
 
 export default CountryFlag
