@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 import { Image, View } from 'react-native'
 import { DialCode } from './assets/dialCodes'
 
@@ -7,7 +7,7 @@ interface CountryFlagProps {
     dialCode?: DialCode
 }
 
-const CountryFlag: FC<CountryFlagProps> = (props) => (
+const CountryFlag = (props: CountryFlagProps) => (
     <View style={{
         alignItems: 'center',
         height: 40,
@@ -22,7 +22,8 @@ const CountryFlag: FC<CountryFlagProps> = (props) => (
                     height: undefined,
                     width: 28
                 }}
-                source={props.dialCode.icon} />
+                source={props.dialCode.icon}
+            />
         )}
     </View>
 )

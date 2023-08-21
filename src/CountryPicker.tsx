@@ -1,22 +1,22 @@
-import React, { FC, useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Animated, Dimensions, FlatList, Modal, Text, TouchableOpacity, TouchableWithoutFeedback, useColorScheme, View } from 'react-native'
 import CountryFlag from './CountryFlag'
 import dialCodes, { DialCode } from './assets/dialCodes'
 
 const { width, height } = Dimensions.get('window')
 
-interface Props {
+interface CountryPickerProps {
     children?: any
     visible: boolean
     onSelect(dialCode: DialCode): void
     onRequestClose(): void
 }
 
-const CountryPicker: FC<Props> = ({
+const CountryPicker = ({
     visible = false,
-    onSelect = (dialCode: DialCode) => {},
+    onSelect = () => {},
     onRequestClose = () => {}
-}) => {
+}: CountryPickerProps) => {
 
     const pickerHeight = useRef(height - 285).current
     const showAnimation = useRef(new Animated.Value(0)).current

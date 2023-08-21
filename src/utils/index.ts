@@ -16,7 +16,7 @@ export function normalize(phoneNumber: string): string {
 export function findDialCode(phoneNumber: string): any {
     let dialCode = null
     for (let i = 5; i >= 2; i--) {
-        dialCode = dialCodes.find(dc => dc.dialCode === phoneNumber.substr(0, i))
+        dialCode = dialCodes.find(dc => dc.dialCode === phoneNumber.substring(0, i))
         if (dialCode) break
     }
     return dialCode

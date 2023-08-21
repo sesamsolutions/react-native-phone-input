@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Keyboard, TextInput, TouchableOpacity, View } from 'react-native'
 import CountryFlag from './CountryFlag'
 import CountryPicker from './CountryPicker'
@@ -17,9 +17,6 @@ export interface PhoneInputProps {
     textStyle?: object
     dismissKeyboard?: boolean
     autoFocus?: boolean
-    allowCustomDialCode?: boolean // deprecated
-    dialCodeStyle?: object // deprecated
-    dialCodeTextStyle?: object // deprecated
     onChange?(data: PhoneInputChangeEvent): void
     onChangePhoneNumber?(phoneNumber: string): void
 }
@@ -32,38 +29,27 @@ export interface PhoneInputChangeEvent {
     e164: string | null
 }
 
-const PhoneInput: FC<PhoneInputProps> = ({
+const PhoneInput = ({
     initialCountry = 'US',
     value,
     style = {},
     textStyle = {},
     dismissKeyboard = true,
     autoFocus = false,
-    onChange = (data: PhoneInputChangeEvent) => {},
-    onChangePhoneNumber = (phoneNumber: string) => {}
-}) => {
+    onChange = () => {},
+    onChangePhoneNumber = () => {}
+}: PhoneInputProps) => {
 
-    const [ dialCode, setDialCode ] = useState<DialCode | undefined>(undefined)
-    const [ phoneNumber, setPhoneNumber ] = useState('')
+    const initialDialCode = useMemo(() => dialCodes.find(dc => initialCountry && dc.countryCode === initialCountry.toUpperCase()), [])
+    const [ dialCode, setDialCode ] = useState<DialCode | undefined>(initialDialCode)
+    const [ phoneNumber, setPhoneNumber ] = useState(initialDialCode?.dialCode ?? '')
     const [ countryPickerVisible, setCountryPickerVisible ] = useState(false)
-
-    useEffect(() => {
-        const dialCode = initialDialCode()
-        if (dialCode) {
-            setDialCode(dialCode)
-            setPhoneNumber(dialCode.dialCode)
-        }
-    }, [])
 
     useEffect(() => {
         if (value && value.length) {
             handleChangeText(value)
         }
     }, [ value ])
-
-    const initialDialCode = (): DialCode | undefined => {
-        return dialCodes.find(dc => initialCountry && dc.countryCode === initialCountry.toUpperCase())
-    }
 
     const isValidNumber = (number: string, country: string): boolean => {
         const obj = phoneUtil.parse(number, country)
@@ -74,8 +60,10 @@ const PhoneInput: FC<PhoneInputProps> = ({
         input = normalize(input)
         let dc = findDialCode(input)
         if (!dc && !input.startsWith('+') && !input.startsWith('00')) {
-            dc = initialDialCode()
-            if (dc && input.length >= 2) input = dc.dialCode + input.replace(/^0+/, '')
+            dc = initialDialCode
+            if (dc && input.length >= 2) {
+                input = dc.dialCode + input.replace(/^0+/, '')
+            }
         }
         setDialCode(dc) // update flag icon
         setPhoneNumber(input)
@@ -87,7 +75,11 @@ const PhoneInput: FC<PhoneInputProps> = ({
     const emitChange = (number: string, dialCode?: DialCode): void => {
         if (onChange) {
             const event: PhoneInputChangeEvent = {
-                input: number, dialCode: null, countryCode: null, isValid: false, e164: null
+                input: number,
+                dialCode: null,
+                countryCode: null,
+                isValid: false,
+                e164: null
             }
             if (dialCode) {
                 event.dialCode = dialCode.dialCode
@@ -125,7 +117,10 @@ const PhoneInput: FC<PhoneInputProps> = ({
                 flexDirection: 'row',
                 ...style
             }}>
-                <TouchableOpacity onPress={openCountryPicker} style={{ flexDirection: 'row' }}>
+                <TouchableOpacity
+                    style={{ flexDirection: 'row' }}
+                    onPress={openCountryPicker}
+                >
                     <CountryFlag dialCode={dialCode} />
                 </TouchableOpacity>
                 <TextInput
@@ -145,7 +140,8 @@ const PhoneInput: FC<PhoneInputProps> = ({
             <CountryPicker
                 visible={countryPickerVisible}
                 onSelect={handleSelect}
-                onRequestClose={() => setCountryPickerVisible(false)} />
+                onRequestClose={() => setCountryPickerVisible(false)}
+            />
         </>
     )
 
