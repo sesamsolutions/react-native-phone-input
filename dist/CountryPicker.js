@@ -31,7 +31,7 @@ const react_native_1 = require("react-native");
 const CountryFlag_1 = __importDefault(require("./CountryFlag"));
 const dialCodes_1 = __importDefault(require("./assets/dialCodes"));
 const { width, height } = react_native_1.Dimensions.get('window');
-const CountryPicker = ({ visible = false, onSelect = (dialCode) => { }, onRequestClose = () => { } }) => {
+const CountryPicker = ({ visible = false, onSelect = () => { }, onRequestClose = () => { } }) => {
     const pickerHeight = (0, react_1.useRef)(height - 285).current;
     const showAnimation = (0, react_1.useRef)(new react_native_1.Animated.Value(0)).current;
     const [_visible, _setVisible] = (0, react_1.useState)(visible);

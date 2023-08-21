@@ -21,7 +21,7 @@ exports.normalize = normalize;
 function findDialCode(phoneNumber) {
     let dialCode = null;
     for (let i = 5; i >= 2; i--) {
-        dialCode = dialCodes_1.default.find(dc => dc.dialCode === phoneNumber.substr(0, i));
+        dialCode = dialCodes_1.default.find(dc => dc.dialCode === phoneNumber.substring(0, i));
         if (dialCode)
             break;
     }
