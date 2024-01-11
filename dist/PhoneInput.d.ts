@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from 'react';
 export interface PhoneInputProps {
     ref?: any;
     children?: any;
@@ -18,5 +18,5 @@ export interface PhoneInputChangeEvent {
     isValid: boolean;
     e164: string | null;
 }
-declare const PhoneInput: ({ initialCountry, value, style, textStyle, dismissKeyboard, autoFocus, onChange, onChangePhoneNumber }: PhoneInputProps) => JSX.Element;
+declare const PhoneInput: React.ForwardRefExoticComponent<Pick<PhoneInputProps, "children" | "style" | "initialCountry" | "value" | "textStyle" | "dismissKeyboard" | "autoFocus" | "onChange" | "onChangePhoneNumber"> & React.RefAttributes<unknown>>;
 export default PhoneInput;

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { forwardRef, useEffect, useMemo, useState } from 'react'
 import { Keyboard, TextInput, TouchableOpacity, View } from 'react-native'
 import CountryFlag from './CountryFlag'
 import CountryPicker from './CountryPicker'
@@ -29,7 +29,7 @@ export interface PhoneInputChangeEvent {
     e164: string | null
 }
 
-const PhoneInput = ({
+const PhoneInput = forwardRef(({
     initialCountry = 'US',
     value,
     style = {},
@@ -38,7 +38,7 @@ const PhoneInput = ({
     autoFocus = false,
     onChange = () => {},
     onChangePhoneNumber = () => {}
-}: PhoneInputProps) => {
+}: PhoneInputProps, ref) => {
 
     const initialDialCode = useMemo(() => dialCodes.find(dc => initialCountry && dc.countryCode === initialCountry.toUpperCase()), [])
     const [ dialCode, setDialCode ] = useState<DialCode | undefined>(initialDialCode)
@@ -111,7 +111,7 @@ const PhoneInput = ({
 
     return (
         <>
-            <View style={{
+            <View ref={ref as any} style={{
                 borderColor: '#eeeeee',
                 borderBottomWidth: 1,
                 flexDirection: 'row',
@@ -145,6 +145,6 @@ const PhoneInput = ({
         </>
     )
 
-}
+})
 
 export default PhoneInput
