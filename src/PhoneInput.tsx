@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useMemo, useState } from 'react'
-import { Keyboard, TextInput, TouchableOpacity, View } from 'react-native'
+import { Keyboard, TextInput, TouchableOpacity, View, NativeSyntheticEvent, TextInputFocusEventData } from 'react-native'
 import CountryFlag from './CountryFlag'
 import CountryPicker from './CountryPicker'
 import dialCodes, { DialCode } from './assets/dialCodes'
@@ -19,6 +19,8 @@ export interface PhoneInputProps {
     autoFocus?: boolean
     onChange?(data: PhoneInputChangeEvent): void
     onChangePhoneNumber?(phoneNumber: string): void
+    onFocus?(event: NativeSyntheticEvent<TextInputFocusEventData>): void
+    onBlur?(event: NativeSyntheticEvent<TextInputFocusEventData>): void
 }
 
 export interface PhoneInputChangeEvent {
@@ -37,7 +39,9 @@ const PhoneInput = forwardRef(({
     dismissKeyboard = true,
     autoFocus = false,
     onChange = () => {},
-    onChangePhoneNumber = () => {}
+    onChangePhoneNumber = () => {},
+    onFocus,
+    onBlur
 }: PhoneInputProps, ref) => {
 
     const initialDialCode = useMemo(() => dialCodes.find(dc => initialCountry && dc.countryCode === initialCountry.toUpperCase()), [])
@@ -111,12 +115,10 @@ const PhoneInput = forwardRef(({
 
     return (
         <>
-            <View ref={ref as any} style={{
+            <View ref={ref as any} style={[{
                 borderColor: '#eeeeee',
-                borderBottomWidth: 1,
-                flexDirection: 'row',
-                ...style
-            }}>
+                flexDirection: 'row'
+            },style]}>
                 <TouchableOpacity
                     style={{ flexDirection: 'row' }}
                     onPress={openCountryPicker}
@@ -124,18 +126,19 @@ const PhoneInput = forwardRef(({
                     <CountryFlag dialCode={dialCode} />
                 </TouchableOpacity>
                 <TextInput
-                    dataDetectorTypes={[ 'phoneNumber' ]}
+                    dataDetectorTypes={['phoneNumber']}
                     keyboardType={'phone-pad'}
                     onChangeText={handleChangeText}
                     autoFocus={autoFocus}
                     value={phoneNumber}
-                    style={{
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                    style={[{
                         borderWidth: 0,
                         flexGrow: 1,
                         height: 40,
-                        paddingLeft: 0,
-                        ...textStyle
-                    }} />
+                        paddingLeft: 0
+                    },textStyle]} />
             </View>
             <CountryPicker
                 visible={countryPickerVisible}
